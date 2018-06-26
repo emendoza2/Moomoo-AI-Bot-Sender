@@ -1329,10 +1329,27 @@ class Bot {
 			});
 			// Chat (id, name)
 			sk.on("ch", (id, msg) => {
-				if (id != ownerID) return;
+console.log(id, msg);
 				if (!msg.startsWith("!")) return;
+				
 				const args = msg.slice(1).trim().split(/ +/g);
 				const command = args.shift().toLowerCase();
+				console.log(command);
+				if (command === "id") {
+					const a = [];
+					for (const k in players) {
+						if (players[k].name === args.join(" ")) a.push(k);
+					}
+					if (a.length > 0) {
+						this.chatMsg = a.join(", ").slice(0, 30);
+					}else{
+						this.chatMsg = "Player not in memory.";
+					}
+					clearInterval(this.chatInterval);
+					this.chatInterval = null;
+					setTimeout(this.chat.bind(this), 1000);
+				}	
+				if (id != ownerID) return;
 				if (command === "fme") {
 					goto.x = goto.y = null;
 					stay = false;
